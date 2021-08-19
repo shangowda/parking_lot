@@ -1,0 +1,36 @@
+﻿@model IEnumerable<parking_lot.Models.OverviewByVehicle>
+@{
+    ViewData["Title"] = "OverviewByVehicle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Overview By Vehicle</h1>
+
+<div class="row">
+    <div class="col-md-12 table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Lot Name</th>
+                    <th>Motor Cycle</th>
+                    <th>Car</th>
+                    <th>Van</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+
+                    <tr>
+                        <td>@item.LotName</td>
+                        <td>@item.MotorCycle</td>
+                        <td>@item.Car</td>
+                        <td>@item.Van</td>
+                    </tr>
+
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>

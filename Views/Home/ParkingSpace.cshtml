@@ -1,0 +1,63 @@
+﻿@model IEnumerable<parking_lot.Models.ParkingSpace>
+
+@{
+    ViewData["Title"] = "ParkingSpace";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Parking Spaces</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Lot)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SpaceType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RightSpace)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LeftSpace)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsFull)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vehicle)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Lot)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SpaceType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RightSpace)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LeftSpace)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsFull)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vehicle)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
