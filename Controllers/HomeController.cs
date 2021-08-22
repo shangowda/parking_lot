@@ -13,21 +13,16 @@ namespace parking_lot.Controllers
 {
     public class HomeController : Controller
     {
-        //private readonly ILogger<HomeController> _logger;
-        
+             
         private readonly parking_lotContext _context;
+
 
         public HomeController(parking_lotContext context)
         {
             _context = context;
         }
        
-        /**
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-        **/
+        
         public IActionResult Index()
         {
             return View();
@@ -40,20 +35,20 @@ namespace parking_lot.Controllers
 
 
         /**
-         * Detail view of parking space
+         * Detail view of every parking space
          */
-        public IActionResult ParkingSpace()
+        public async Task<IActionResult> ParkingSpace()
         {
-            return View();
+            return View(await _context.ParkingSpaces.ToListAsync());
         }
 
         /**
          * Overview of vehicles parked by lot/vehicle type
          */
-        public IActionResult ParkingOverview()
+        public List<ParkingOverview> ParkingOverview()
         {
-            var spaceOverview = _context.ParkingOverview.FromSqlRaw($"space_overview").ToList();
-            return View(spaceOverview);
+            List<ParkingOverview> po = _context.ParkingOverview.FromSqlRaw($"space_overview").ToList();
+            return po;
         }
 
         /**
@@ -66,12 +61,22 @@ namespace parking_lot.Controllers
         }
 
         /**
-         * Total sopts ramianing ex:motorcycle=10,car=5,van=5
-         */
-        public IActionResult SpotsRemaining()
-        {
-            return View();
+ * Total sopts ramianing ex:motorcycle=10,car=5,large=5
+ */
+        [HttpGet]
+        public int SpotsRemainingBySpaceType(string type)        {
+            
+            var po = _context.ParkingOverview.FromSqlRaw($"space_overview");
+            var count = 0;
+            type = IsNullOrEmpty(type) ? "car" : type;
+            foreach (var item in po)
+            {
+                if (item.SpaceType == type)
+                    count+=item.Open;
+            }
+            return count;
         }
+
 
         /**
          * Type of open space available in each category EX: motorcycle = 10,car = 5, van=1
@@ -81,10 +86,33 @@ namespace parking_lot.Controllers
             return View();
         }
 
-
-        public IActionResult IsFull()
+        /**
+         * Method which counts all the empty spaces and returns 0 if parking lot is not full and 1 if it is full
+         */
+        [HttpGet]
+        public bool IsFull()
         {
-            return View();
+            var po = _context.ParkingSpaces.ToList();
+            foreach(var item in po)
+            {
+                if (item.IsFull > 0)
+                    return false;
+            }
+            return true;
         }
+
+
+        private bool IsNullOrEmpty(string type)
+        {
+            throw new NotImplementedException();
+        }
+        /**
+         * Overview of vehicles parked by lot/vehicle type
+         
+        public IActionResult HowManyTotalSpots()
+        {
+            //return _context.ParkingSpaces.FromSqlRaw("SELECT Count(id) FROM Dbo.parking_space");
+        }
+        */
     }
 }
